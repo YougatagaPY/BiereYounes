@@ -1,0 +1,39 @@
+{
+    "name": "Biere Younes",
+    "short_name": "Biere",
+    "start_url": "./index.html",
+    "display": "fullscreen",
+    "description": "L'application qui vous aide a chercher une biere !",
+    "background_color": "white",
+    "icons": [
+      {
+        "src": "img/android-chrome-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "img/android-chrome-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "img/favicon-16x16.png",
+        "sizes": "16x16",
+        "type": "image/png"
+      },
+      {
+        "src": "img/mstile-150x150.png",
+        "sizes": "150x150",
+        "type": "image/png"
+      },
+      {
+        "src": "img/apple-touch-icon.png",
+        "sizes": "180x180",
+        "type": "image/png"
+      },
+      {
+        "src": "img/favicon.ico",
+        "sizes": "32x32",
+        "type": "image/png"
+      }
+    ]}

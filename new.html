@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="manifest" href="manifest.json" />
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+*
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background:url(https://img.playbook.com/IZSaaisbuPYRUSQYBZckzA61Px-1dJx2_5pGRp3N4dk/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzRkZmUwYjQ2/LWRhNjAtNDQ2Yy1h/Y2UxLWM0ZTZkMGI3/NTdlMA);
+    background-size: cover;
+    background-position: center;
+}
+.wrapper {
+    width: 420px;
+    background: transparent;
+    border:2px solid rgba(255, 255, 255, .2);
+    backdrop-filter:blur(20px);
+    box-shadow: 0 0 10px rgba(0 , 0 , 0 , .2);
+    color: #fff;
+    border-radius: 10px;
+    padding: 30px 40px;
+
+}
+.wrapper h1{
+    font-size: 36px;
+    text-align: center;
+}
+.wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+}
+
+.input-box input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, .2);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #fff;
+    padding: 20px 45px 20px 20px;
+}
+.input-box input::placeholder{
+    color: #fff;
+}
+.input-box i{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+
+}
+.wrapper .remember-forgot{
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+.remember-forgot label input{
+    accent-color: #fff;
+    margin-right: 3px;
+}
+.remember-forgot a{
+    color: #fff;
+    text-decoration: none;
+
+}
+.remember-forgot a:hover{
+    text-decoration: underline;
+}
+.wrapper .btn{
+    width: 100%;
+    height: 45px;
+    border-radius: 40px;
+    border: none;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0 , 0 , 0 , .1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+}
+.wrapper .register-link{
+   text-align: center;
+    font-size: 14.5px;
+    margin:20px 0 15px;
+}
+.register-link p a{
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+
+}
+.register-link p a:hover{
+    text-decoration: underline;
+}
+input {
+    margin-top: 1rem;
+  }
+  
+  input::file-selector-button {
+    font-weight: bold;
+    color: dodgerblue;
+    padding: 0.5em;
+    border: thin solid grey;
+    border-radius: 3px;
+  }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <form action="">
+            <h1>Nouvelle bière</h1>
+            <div class="input-box">
+                <input id="name" type="text" placeholder="Nom" required>
+            </div>
+            <div class="input-box">
+                <input id="desc" type="text" placeholder="description" required>
+            </div>
+            <div>
+                 <label for="avatar">Image biere:</label><br />
+                <input id="img" type="file" name="avatar" accept="image/png, image/jpeg" />
+            </div>
+            <div>
+                <button type="submit" class="btn">Ajoutez</button>
+            </div>
+            <div class="register-link">
+<a href="index.html"> <p style="color: black;">Retour a l'acceuil </p></a>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+
+
+
+ var lien_ = document.getElementById("img").value
+ var nom_ =  document.getElementById("name").value
+ var des_ =  document.getElementById("desc").value
+
+ async function initDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('BeerDB', 1);
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        const store = db.createObjectStore('beers', { keyPath: 'id' });
+        store.createIndex('name', 'name', { unique: false });
+      };
+
+      request.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+
+      request.onerror = (event) => {
+        reject('Error opening IndexedDB');
+      };
+    });
+  }
+
+  // Fonction pour ajouter une bière à la base de données
+  async function addToDB(beer) {
+
+    const transaction = db.transaction(['beers'], 'readwrite');
+    const store = transaction.objectStore('beers');
+    await store.add({id: Math.floor(Math.random() * 10100000),
+    nom: nom_,
+    description: des_,
+    lien_image: lien_});
+  }
+
+  // Fonction pour récupérer les bières depuis la base de données
+  async function getBeersFromDB() {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(['beers'], 'readonly');
+      const store = transaction.objectStore('beers');
+      const request = store.getAll();
+
+      request.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+
+      request.onerror = (event) => {
+        reject('Error fetching beers from IndexedDB');
+      };
+    });
+  }
+
+  // Function to fetch beers from Punk API
+  async function modelFetchBeers() {
+    // Essayer de récupérer les bières depuis la base de données
+    try {
+      beers = await getBeersFromDB();
+
+      // Si la base de données est vide, récupérer depuis l'API et ajouter à la base de données
+      if (beers.length === 0) {
+        beers = await fetch('https://api.punkapi.com/v2/beers')
+          .then(response => response.json())
+          .then(data => {
+            data.forEach(async (beer) => {
+              await addToDB(beer);
+            });
+            return data;
+          })
+          .catch(error => console.error('Error fetching beers:', error));
+      }
+
+      displayBeers(beers);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  // Ajoutez control si nécessaire puis appelez le modèle
+  modelFetchBeers();
+</script>
+</html>
